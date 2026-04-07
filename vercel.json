@@ -1,5 +1,1 @@
-{
-  "buildCommand": "cd ot-copilot && npm install && npm run build",
-  "outputDirectory": "ot-copilot/dist",
-  "installCommand": "echo 'skip'"
-}
+{}
