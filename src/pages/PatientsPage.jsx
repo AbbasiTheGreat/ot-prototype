@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Filter, Plus, User, Calendar, FileText, ChevronRight, Phone, Mail } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Plus, User, Calendar, FileText, ChevronRight } from 'lucide-react';
 import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
-import { patients } from '../data/mockData';
+import NewSessionModal from '../components/NewSessionModal';
+import { patients as seedPatients } from '../data/mockData';
 
-const allPatients = [
-  ...patients,
+const basePatients = [
+  ...seedPatients,
   {
     id: 6, name: "Sofia Ramirez", age: 8, dob: "2017-06-12", cptCode: "97530", encounterType: "Follow-Up",
     sessionDate: "2026-04-08", sessionTime: "09:30", therapist: "Sarah Mitchell, OTR/L",
@@ -34,8 +35,10 @@ const cptColors = { '97166': 'blue', '96112': 'purple', '97530': 'green' };
 const statusColors = { 'Completed': 'green', 'In Progress': 'blue', 'Scheduled': 'gray' };
 
 export default function PatientsPage({ onSelectPatient }) {
+  const [allPatients, setAllPatients] = useState(basePatients);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
+  const [showModal, setShowModal] = useState(false);
 
   const filters = ['All', 'Initial Evaluation', 'Follow-Up', 'Standardized Assessment'];
 
@@ -46,6 +49,12 @@ export default function PatientsPage({ onSelectPatient }) {
     return matchSearch && matchFilter;
   });
 
+  const handleSessionCreated = (newPatient) => {
+    setAllPatients(prev => [newPatient, ...prev]);
+    // immediately open the encounter for this patient
+    onSelectPatient && onSelectPatient(newPatient);
+  };
+
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
@@ -53,8 +62,11 @@ export default function PatientsPage({ onSelectPatient }) {
           <h1 className="text-2xl font-bold text-slate-800">Patients</h1>
           <p className="text-slate-500 text-sm mt-0.5">{allPatients.length} patients on caseload</p>
         </div>
-        <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-          <Plus size={16} /> Add Patient
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+        >
+          <Plus size={16} /> New Session
         </button>
       </motion.div>
 
@@ -106,8 +118,8 @@ export default function PatientsPage({ onSelectPatient }) {
 
               <div className="space-y-2 text-xs text-slate-500">
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><Calendar size={12} /> Next: {p.sessionDate} at {p.sessionTime}</span>
-                  <Badge variant={statusColors[p.status]}>{p.status}</Badge>
+                  <span className="flex items-center gap-1.5"><Calendar size={12} /> {p.sessionDate} at {p.sessionTime}</span>
+                  <Badge variant={statusColors[p.status] || 'gray'}>{p.status}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5"><FileText size={12} /> {p.encounterType}</span>
@@ -119,13 +131,23 @@ export default function PatientsPage({ onSelectPatient }) {
               </div>
 
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-                <span>{p.totalSessions ?? patients.find(x => x.id === p.id)?.goals?.length ?? 0} sessions total</span>
+                <span>{p.totalSessions ?? 0} sessions total</span>
                 <span>Last visit: {p.lastVisit || 'First visit'}</span>
               </div>
             </Card>
           </motion.div>
         ))}
       </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <NewSessionModal
+            onClose={() => setShowModal(false)}
+            onSessionCreated={handleSessionCreated}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

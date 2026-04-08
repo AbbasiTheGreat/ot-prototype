@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lightbulb, Mic, MicOff, ChevronDown, ChevronUp, Sparkles, Info } from 'lucide-react';
+import { Lightbulb, ChevronDown, ChevronUp, Sparkles, Info } from 'lucide-react';
 import Button from '../ui/Button';
 import { soapTemplates, aiSuggestions } from '../../data/mockData';
 
@@ -12,8 +12,8 @@ const sections = [
 ];
 
 const sectionColors = {
-  blue: { border: 'border-blue-300', bg: 'bg-blue-50', badge: 'bg-blue-500', text: 'text-blue-700', ring: 'focus:ring-blue-200' },
-  teal: { border: 'border-teal-300', bg: 'bg-teal-50', badge: 'bg-teal-500', text: 'text-teal-700', ring: 'focus:ring-teal-200' },
+  blue:   { border: 'border-blue-300',   bg: 'bg-blue-50',   badge: 'bg-blue-500',   text: 'text-blue-700',   ring: 'focus:ring-blue-200' },
+  teal:   { border: 'border-teal-300',   bg: 'bg-teal-50',   badge: 'bg-teal-500',   text: 'text-teal-700',   ring: 'focus:ring-teal-200' },
   purple: { border: 'border-purple-300', bg: 'bg-purple-50', badge: 'bg-purple-500', text: 'text-purple-700', ring: 'focus:ring-purple-200' },
   orange: { border: 'border-orange-300', bg: 'bg-orange-50', badge: 'bg-orange-500', text: 'text-orange-700', ring: 'focus:ring-orange-200' },
 };
@@ -22,13 +22,12 @@ export default function SOAPEditor({ patient, onComplete }) {
   const template = soapTemplates[patient.cptCode] || soapTemplates['97530'];
   const [notes, setNotes] = useState({
     subjective: patient.soap?.subjective || '',
-    objective: patient.soap?.objective || '',
+    objective:  patient.soap?.objective  || '',
     assessment: patient.soap?.assessment || '',
-    plan: patient.soap?.plan || '',
+    plan:       patient.soap?.plan       || '',
   });
   const [activeSection, setActiveSection] = useState('subjective');
   const [showSuggestions, setShowSuggestions] = useState({ subjective: false, objective: false, assessment: false, plan: false });
-  const [recording, setRecording] = useState(null);
   const [collapsed, setCollapsed] = useState({});
 
   const handleApplyTemplate = (key) => {
@@ -36,7 +35,6 @@ export default function SOAPEditor({ patient, onComplete }) {
   };
 
   const wordCount = (text) => text.trim() ? text.trim().split(/\s+/).length : 0;
-
   const allFilled = sections.every(s => notes[s.key].trim().length > 20);
 
   return (
@@ -79,7 +77,6 @@ export default function SOAPEditor({ patient, onComplete }) {
             transition={{ delay: idx * 0.07 }}
             className={`rounded-xl border-2 transition-all duration-200 ${isActive ? colors.border : 'border-slate-200'} bg-white overflow-hidden`}
           >
-            {/* Section Header */}
             <div
               className={`flex items-center gap-3 px-4 py-3 cursor-pointer ${isActive ? colors.bg : 'hover:bg-slate-50'}`}
               onClick={() => { setActiveSection(section.key); setCollapsed(prev => ({ ...prev, [section.key]: false })); }}
@@ -104,7 +101,6 @@ export default function SOAPEditor({ patient, onComplete }) {
               </div>
             </div>
 
-            {/* Section Body */}
             <AnimatePresence>
               {!isCollapsed && (
                 <motion.div
@@ -115,18 +111,9 @@ export default function SOAPEditor({ patient, onComplete }) {
                   className="overflow-hidden"
                 >
                   <div className="px-4 pb-4 space-y-3">
-                    {/* Toolbar */}
                     <div className="flex items-center gap-2 pt-1">
                       <Button variant="ghost" size="sm" onClick={() => handleApplyTemplate(section.key)}>
                         <Sparkles size={13} /> Use Template
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setRecording(recording === section.key ? null : section.key)}
-                        className={recording === section.key ? 'text-red-500 bg-red-50' : ''}
-                      >
-                        {recording === section.key ? <><MicOff size={13} /> Stop</> : <><Mic size={13} /> Voice</>}
                       </Button>
                       <button
                         onClick={() => setShowSuggestions(prev => ({ ...prev, [section.key]: !prev[section.key] }))}
@@ -137,19 +124,6 @@ export default function SOAPEditor({ patient, onComplete }) {
                       </button>
                     </div>
 
-                    {/* Voice indicator */}
-                    {recording === section.key && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="flex items-center gap-2 px-3 py-2 bg-red-50 border border-red-200 rounded-lg"
-                      >
-                        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                        <span className="text-xs text-red-600 font-medium">Recording... speak clearly</span>
-                      </motion.div>
-                    )}
-
-                    {/* Textarea */}
                     <textarea
                       value={notes[section.key]}
                       onChange={e => setNotes(prev => ({ ...prev, [section.key]: e.target.value }))}
@@ -159,7 +133,6 @@ export default function SOAPEditor({ patient, onComplete }) {
                       className={`w-full text-sm text-slate-700 placeholder-slate-300 border border-slate-200 rounded-lg px-3 py-2.5 resize-none focus:outline-none focus:ring-2 ${colors.ring} focus:border-transparent transition-all`}
                     />
 
-                    {/* AI Suggestions */}
                     <AnimatePresence>
                       {showSuggestions[section.key] && (
                         <motion.div
@@ -185,7 +158,6 @@ export default function SOAPEditor({ patient, onComplete }) {
         );
       })}
 
-      {/* Finalize */}
       <div className="flex items-center justify-between pt-2">
         <p className="text-xs text-slate-400">
           {allFilled ? '✓ All sections complete — ready to finalize' : 'Complete all sections before finalizing'}

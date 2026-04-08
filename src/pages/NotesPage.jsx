@@ -124,11 +124,6 @@ export default function NotesPage() {
                     <p className="text-sm text-slate-600 line-clamp-2">{note.preview}</p>
                   </div>
                   <div className="shrink-0 text-right space-y-2">
-                    <div className={`text-sm font-bold ${note.qualityScore >= 90 ? 'text-emerald-600' : note.qualityScore >= 80 ? 'text-blue-600' : 'text-orange-500'}`}>
-                      {note.qualityScore}
-                      <span className="text-xs font-normal text-slate-400">/100</span>
-                    </div>
-                    <p className="text-xs text-slate-400">Quality</p>
                     <button className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium">
                       <Eye size={12} /> View
                     </button>

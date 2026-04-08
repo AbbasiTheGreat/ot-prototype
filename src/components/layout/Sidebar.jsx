@@ -1,12 +1,9 @@
-import { LayoutDashboard, Users, FileText, Settings, Bell, LogOut, Activity, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, Bell, LogOut, Activity, ChevronRight } from 'lucide-react';
 import clsx from 'clsx';
 
 const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', id: 'dashboard' },
   { icon: Users, label: 'Patients', id: 'patients' },
   { icon: FileText, label: 'Notes', id: 'notes' },
-  { icon: Activity, label: 'Reports', id: 'reports' },
-  { icon: Settings, label: 'Settings', id: 'settings' },
 ];
 
 export default function Sidebar({ activePage, onNavigate }) {
