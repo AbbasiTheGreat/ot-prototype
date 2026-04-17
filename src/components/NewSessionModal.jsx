@@ -25,7 +25,7 @@ const dummySoap = {
 function PatientInfoStep({ onNext }) {
   const [form, setForm] = useState({
     name: '', dob: '', diagnosis: '', referralSource: '', encounterType: 'Initial Evaluation',
-    startTime: '09:00', endTime: '09:45',
+    startTime: '09:00', endTime: '09:45', visitDate: new Date().toISOString().split('T')[0],
   });
   const [errors, setErrors] = useState({});
 
@@ -45,10 +45,10 @@ function PatientInfoStep({ onNext }) {
     const e2 = validate();
     if (Object.keys(e2).length) { setErrors(e2); return; }
     const initials = form.name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-    const color = avatarColors[Math.floor(Math.random() * avatarColors.length)];
+    const color = 'bg-blue-500';
     const dob = form.dob;
     const age = new Date().getFullYear() - new Date(dob).getFullYear();
-    onNext({ ...form, cptCode: cpt, avatar: initials, avatarColor: color, age, id: Date.now() });
+    onNext({ ...form, cptCode: cpt, avatar: initials, avatarColor: color, age, id: Date.now(), sessionDate: form.visitDate });
   };
 
   return (
@@ -74,8 +74,7 @@ function PatientInfoStep({ onNext }) {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-600 mb-1">Encounter Type</label>
-          <select
+          <label className="block text-xs font-medium text-slate-600 mb-1">Encounter Type</label>          <select
             value={form.encounterType} onChange={e => set('encounterType', e.target.value)}
             className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white"
           >
@@ -97,6 +96,14 @@ function PatientInfoStep({ onNext }) {
           <input
             value={form.referralSource} onChange={e => set('referralSource', e.target.value)}
             placeholder="e.g. Dr. Smith, Pediatrics"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+          />
+        </div>
+
+        <div className="col-span-2">
+          <label className="block text-xs font-medium text-slate-600 mb-1">Visit Date</label>
+          <input
+            type="date" value={form.visitDate} onChange={e => set('visitDate', e.target.value)}
             className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
           />
         </div>

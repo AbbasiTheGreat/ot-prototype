@@ -85,10 +85,9 @@ export default function BillingSync({ patient }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 mb-5">
+          <div className="grid grid-cols-2 gap-3 mb-5">
             {[
               { label: 'Duration', value: `${duration()} min` },
-              { label: 'Billing Units', value: `${units()} units` },
               { label: 'CPT Code', value: patient.cptCode },
             ].map(item => (
               <div key={item.label} className="bg-slate-50 rounded-lg px-3 py-2.5 text-center">
@@ -133,7 +132,7 @@ export default function BillingSync({ patient }) {
             <div className={`flex items-center gap-3 px-4 py-3 rounded-lg border ${synced ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200 bg-slate-50'}`}>
               <div className="flex-1">
                 <p className="text-sm font-medium text-slate-700">{patient.cptCode} — {patient.encounterType}</p>
-                <p className="text-xs text-slate-400 mt-0.5">{startTime} – {endTime} · {units()} units</p>
+                <p className="text-xs text-slate-400 mt-0.5">{startTime} – {endTime}</p>
               </div>
               {synced
                 ? <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />

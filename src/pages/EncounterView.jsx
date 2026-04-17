@@ -21,33 +21,6 @@ const encounterColors = {
   '97530': { bg: 'bg-emerald-600', light: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', label: 'Follow-Up' },
 };
 
-function TabProgress({ patient, activeTab }) {
-  const enc = encounterColors[patient.cptCode] || encounterColors['97530'];
-  const steps = [
-    { id: 'services', label: 'Services', done: true },
-    { id: 'soap', label: 'SOAP Note', done: !!(patient.soap?.subjective) },
-    { id: 'goals', label: 'Goals', done: patient.goals?.some(g => g.approved) },
-    { id: 'compliance', label: 'Compliance', done: patient.compliance?.therapistSignoff },
-  ];
-  return (
-    <div className="flex items-center gap-1 mt-3">
-      {steps.map((step, i) => (
-        <div key={step.id} className="flex items-center gap-1">
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-            activeTab === step.id ? `${enc.bg} text-white shadow-sm` :
-            step.done ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
-            'text-slate-400 hover:bg-slate-100 hover:text-slate-600 cursor-pointer'
-          }`}>
-            {step.done && activeTab !== step.id && <CheckCircle2 size={11} />}
-            {step.label}
-          </div>
-          {i < steps.length - 1 && <div className="w-4 h-px bg-slate-200" />}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function EncounterView({ patient, onBack, onNextPatient, nextPatient }) {
   const [activeTab, setActiveTab] = useState('services');
   const [finalized, setFinalized] = useState(false);
@@ -62,14 +35,8 @@ export default function EncounterView({ patient, onBack, onNextPatient, nextPati
           </div>
           <h2 className="text-2xl font-bold text-slate-800 mb-2">Note Finalized</h2>
           <p className="text-slate-500 mb-1">{patient.name} · {patient.encounterType}</p>
-          <p className="text-slate-400 text-sm mb-6">Signed and submitted successfully</p>
           <div className="flex gap-3 justify-center">
-            <Button onClick={onBack} variant="secondary"><ArrowLeft size={15} /> Dashboard</Button>
-            {nextPatient && (
-              <Button onClick={() => onNextPatient(nextPatient)} variant="primary">
-                Next Patient: {nextPatient.name} →
-              </Button>
-            )}
+            <Button onClick={onBack} variant="secondary"><ArrowLeft size={15} /> Back to Dashboard</Button>
           </div>
         </motion.div>
       </div>
@@ -126,11 +93,8 @@ export default function EncounterView({ patient, onBack, onNextPatient, nextPati
           )}
         </div>
 
-        {/* Progress tabs */}
-        <TabProgress patient={patient} activeTab={activeTab} />
-
         {/* Clickable tabs row */}
-        <div className="flex gap-1 mt-2">
+        <div className="flex gap-1 mt-3">
           {[
             { id: 'services', label: 'Services', icon: DollarSign },
             { id: 'soap', label: 'SOAP Note', icon: FileText },
@@ -141,7 +105,7 @@ export default function EncounterView({ patient, onBack, onNextPatient, nextPati
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                activeTab === tab.id ? `${enc.bg} text-white shadow-sm` : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
+                activeTab === tab.id ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'
               }`}
             >
               <tab.icon size={15} />

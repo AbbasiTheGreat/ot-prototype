@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Plus, User, Calendar, FileText, ChevronRight } from 'lucide-react';
-import Card from '../components/ui/Card';
-import Badge from '../components/ui/Badge';
-import NewSessionModal from '../components/NewSessionModal';
+import { motion } from 'framer-motion';
+import { FileText } from 'lucide-react';
 import { patients as seedPatients } from '../data/mockData';
 
 const basePatients = [
@@ -31,57 +28,71 @@ const basePatients = [
   },
 ];
 
-const cptColors = { '97166': 'blue', '96112': 'purple', '97530': 'green' };
-const statusColors = { 'Completed': 'green', 'In Progress': 'blue', 'Scheduled': 'gray' };
+const statusBadge = {
+  'Completed':     'bg-emerald-50 text-emerald-700 border border-emerald-200',
+  'In Progress':   'bg-blue-50 text-blue-700 border border-blue-200',
+  'Scheduled':     'bg-slate-100 text-slate-600 border border-slate-200',
+  'Pending Review':'bg-amber-50 text-amber-700 border border-amber-200',
+  'Draft':         'bg-orange-50 text-orange-600 border border-orange-200',
+  'Finalized':     'bg-purple-50 text-purple-700 border border-purple-200',
+};
 
-export default function PatientsPage({ onSelectPatient }) {
-  const [allPatients, setAllPatients] = useState(basePatients);
+export default function PatientsPage({ onSelectPatient, onNewSession, extraPatients }) {
+  const [allPatients, setAllPatients] = useState([...(extraPatients || []), ...basePatients]);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
-  const [showModal, setShowModal] = useState(false);
 
-  const filters = ['All', 'Initial Evaluation', 'Follow-Up', 'Standardized Assessment'];
+  const filters = ['All', 'Scheduled', 'In Progress', 'Completed'];
 
   const filtered = allPatients.filter(p => {
-    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-      (p.diagnosis || '').toLowerCase().includes(search.toLowerCase());
-    const matchFilter = filter === 'All' || p.encounterType === filter;
+    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
+    const matchFilter = filter === 'All' || p.status === filter;
     return matchSearch && matchFilter;
   });
 
   const handleSessionCreated = (newPatient) => {
     setAllPatients(prev => [newPatient, ...prev]);
-    // immediately open the encounter for this patient
     onSelectPatient && onSelectPatient(newPatient);
   };
-
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-800">Patients</h1>
-          <p className="text-slate-500 text-sm mt-0.5">{allPatients.length} patients on caseload</p>
+    <div className="p-8 max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold text-slate-800 mb-6 text-center">OT CoPilot</h1>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-1">
+          <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Allocated Credits</p>
+          <p className="text-3xl font-bold text-blue-600">630</p>
         </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col gap-1">
+          <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Remaining Credits</p>
+          <p className="text-3xl font-bold text-red-500">7</p>
+        </div>
+      </div>
+
+      {/* Header row */}
+      <div className="flex items-center justify-between mb-6">
+        <div />
         <button
-          onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          onClick={() => onNewSession && onNewSession()}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors"
         >
-          <Plus size={16} /> New Session
+          Record New Session
         </button>
-      </motion.div>
+      </div>
 
       {/* Search + Filter */}
-      <div className="flex gap-3 flex-wrap">
-        <div className="relative flex-1 min-w-48">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+      <div className="flex items-center gap-3 mb-4">
+        <div className="relative flex-1">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search by name or diagnosis..."
+            placeholder="Search by patient name..."
             className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 bg-white"
           />
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-1">
           {filters.map(f => (
             <button
               key={f}
@@ -94,60 +105,67 @@ export default function PatientsPage({ onSelectPatient }) {
         </div>
       </div>
 
-      {/* Patient Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filtered.map((p, i) => (
-          <motion.div
-            key={p.id}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-          >
-            <Card className="p-5 cursor-pointer hover:shadow-md hover:border-blue-200 transition-all" onClick={() => onSelectPatient && onSelectPatient(p)}>
-              <div className="flex items-start gap-3 mb-4">
-                <div className={`w-11 h-11 rounded-full ${p.avatarColor} flex items-center justify-center text-white font-bold shrink-0`}>
-                  {p.avatar}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-slate-800 truncate">{p.name}</p>
-                  <p className="text-xs text-slate-400">Age {p.age} · DOB {p.dob}</p>
-                  <p className="text-xs text-slate-500 mt-0.5 truncate">{p.diagnosis || 'No diagnosis on file'}</p>
-                </div>
-                <ChevronRight size={16} className="text-slate-300 shrink-0 mt-1" />
-              </div>
-
-              <div className="space-y-2 text-xs text-slate-500">
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><Calendar size={12} /> {p.sessionDate} at {p.sessionTime}</span>
-                  <Badge variant={statusColors[p.status] || 'gray'}>{p.status}</Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5"><FileText size={12} /> {p.encounterType}</span>
-                  <Badge variant={cptColors[p.cptCode] || 'gray'}>{p.cptCode}</Badge>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <User size={12} /> {p.referralSource || 'No referral on file'}
-                </div>
-              </div>
-
-              <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-                <span>{p.totalSessions ?? 0} sessions total</span>
-                <span>Last visit: {p.lastVisit || 'First visit'}</span>
-              </div>
-            </Card>
-          </motion.div>
-        ))}
+      {/* Table */}
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-slate-50 border-b border-slate-200">
+              {['Patient No.', 'Patient Name', 'Encounter Type', 'CPT Code', 'Visit Date', 'Status', 'Actions'].map(col => (
+                <th key={col} className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  {col}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {filtered.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="px-5 py-16 text-center text-slate-400 text-sm">
+                  No patients found.
+                </td>
+              </tr>
+            ) : (
+              filtered.map((p, i) => (
+                <motion.tr
+                  key={p.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="hover:bg-blue-50/40 transition-colors group"
+                >
+                  <td className="px-5 py-4 text-slate-400 text-xs font-mono">{String(i + 1).padStart(3, '0')}</td>
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full ${p.avatarColor} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
+                        {p.avatar}
+                      </div>
+                      <span className="font-semibold text-slate-800">{p.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-5 py-4 text-slate-600">{p.encounterType}</td>
+                  <td className="px-5 py-4">
+                    <span className="px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-600 font-mono">{p.cptCode}</span>
+                  </td>
+                  <td className="px-5 py-4 text-slate-500">{p.sessionDate}</td>
+                  <td className="px-5 py-4">
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusBadge[p.status] || statusBadge['Scheduled']}`}>
+                      {p.status}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4">
+                    <button
+                      onClick={() => onSelectPatient && onSelectPatient(p)}
+                      className="flex items-center gap-1.5 text-blue-600 hover:text-blue-800 text-xs font-semibold transition-colors group-hover:underline"
+                    >
+                      <FileText size={13} /> Open Note
+                    </button>
+                  </td>
+                </motion.tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
-
-      {/* Modal */}
-      <AnimatePresence>
-        {showModal && (
-          <NewSessionModal
-            onClose={() => setShowModal(false)}
-            onSessionCreated={handleSessionCreated}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }

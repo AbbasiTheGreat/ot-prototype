@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Activity, LogIn, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Activity, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 function ConnectingAnimation({ onDone }) {
-  const [status, setStatus] = useState('connecting'); // 'connecting' | 'success'
+  const [status, setStatus] = useState('connecting');
 
   useEffect(() => {
     const t1 = setTimeout(() => setStatus('success'), 2000);
@@ -12,9 +12,8 @@ function ConnectingAnimation({ onDone }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="flex flex-col items-center gap-10">
-        {/* Two boxes connected by animated arrow */}
         <div className="flex items-center gap-6">
           {/* OT Co-Pilot box */}
           <motion.div
@@ -28,8 +27,8 @@ function ConnectingAnimation({ onDone }) {
             <p className="text-slate-800 font-bold text-sm">OT Co-Pilot</p>
           </motion.div>
 
-          {/* Animated arrow */}
-          <div className="flex items-center gap-1 relative w-28">
+          {/* Animated arrows */}
+          <div className="flex items-center relative w-28 h-8">
             {[0, 1, 2, 3].map((i) => (
               <motion.div
                 key={i}
@@ -39,7 +38,7 @@ function ConnectingAnimation({ onDone }) {
                 className="absolute"
                 style={{ left: i * 24 }}
               >
-                <ArrowRight size={22} className="text-blue-400" />
+                <ArrowRight size={22} className="text-blue-500" />
               </motion.div>
             ))}
           </div>
@@ -65,14 +64,13 @@ function ConnectingAnimation({ onDone }) {
           </motion.div>
         </div>
 
-        {/* Status text */}
         <AnimatePresence mode="wait">
           {status === 'connecting' ? (
-            <motion.p key="connecting" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-slate-400 text-sm">
+            <motion.p key="connecting" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-slate-500 text-sm">
               Connecting to Elite Platform...
             </motion.p>
           ) : (
-            <motion.p key="success" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="text-emerald-400 text-sm font-medium">
+            <motion.p key="success" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="text-emerald-600 text-sm font-medium">
               Connected successfully
             </motion.p>
           )}
@@ -83,26 +81,26 @@ function ConnectingAnimation({ onDone }) {
 }
 
 export default function ConnectPage({ onConnect }) {
-  const [step, setStep] = useState('landing'); // 'landing' | 'login' | 'connecting'
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [connecting, setConnecting] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (username === 'admin' && password === 'admin') {
-      setStep('connecting');
+      setConnecting(true);
     } else {
       setError('Invalid credentials. Please try again.');
     }
   };
 
-  if (step === 'connecting') {
+  if (connecting) {
     return <ConnectingAnimation onDone={onConnect} />;
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -119,71 +117,49 @@ export default function ConnectPage({ onConnect }) {
           </div>
         </div>
 
-        {step === 'landing' ? (
-          <motion.div key="landing" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <h1 className="text-2xl font-bold text-slate-800 mb-2">Welcome back</h1>
-            <p className="text-slate-500 text-sm mb-8">
-              Connect your Elite Platform account to get started with OT Co-Pilot.
-            </p>
-            <button
-              onClick={() => setStep('login')}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              <LogIn size={18} />
-              Connect to Elite
-            </button>
-          </motion.div>
-        ) : (
-          <motion.div key="login" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <h1 className="text-2xl font-bold text-slate-800 mb-2">Sign in to Elite</h1>
-            <p className="text-slate-500 text-sm mb-6">Enter your Elite Platform credentials.</p>
+        <h1 className="text-2xl font-bold text-slate-800 mb-1">Sign in</h1>
+        <p className="text-slate-500 text-sm mb-6">Enter your credentials to connect to Elite Platform.</p>
 
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">Username</label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => { setUsername(e.target.value); setError(''); }}
-                  placeholder="Enter username"
-                  className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  autoFocus
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                  placeholder="Enter password"
-                  className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => { setUsername(e.target.value); setError(''); }}
+              placeholder="Enter username"
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              autoFocus
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setError(''); }}
+              placeholder="Enter password"
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
 
-              {error && (
-                <div className="flex items-center gap-2 text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg">
-                  <AlertCircle size={15} />
-                  {error}
-                </div>
-              )}
+          {error && (
+            <div className="flex items-center gap-2 text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg">
+              <AlertCircle size={15} />
+              {error}
+            </div>
+          )}
 
-              <button
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
-              >
-                Sign In
-              </button>
-              <button
-                type="button"
-                onClick={() => { setStep('landing'); setError(''); }}
-                className="w-full text-slate-400 hover:text-slate-600 text-sm py-1 transition-colors"
-              >
-                Back
-              </button>
-            </form>
-          </motion.div>
-        )}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2"
+          >
+            <div className="w-4 h-4 bg-slate-800 rounded flex items-center justify-center shrink-0">
+              <span className="text-white font-bold text-[9px]">EP</span>
+            </div>
+            Connect to Elite
+          </button>
+        </form>
       </motion.div>
     </div>
   );
