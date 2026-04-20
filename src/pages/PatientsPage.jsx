@@ -77,7 +77,7 @@ export default function PatientsPage({ onSelectPatient, onNewSession, extraPatie
           onClick={() => onNewSession && onNewSession()}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors"
         >
-          Record New Session
+          Start New Session
         </button>
       </div>
 

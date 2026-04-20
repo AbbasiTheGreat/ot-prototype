@@ -121,9 +121,27 @@ function PatientInfoStep({ onNext }) {
         </p>
       </div>
 
-      <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
-        Continue to Recording <ChevronRight size={15} />
-      </button>
+      <div className="flex flex-col gap-3">
+        <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
+          Continue to Recording <ChevronRight size={15} />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            const errs = {};
+            if (!form.name.trim()) errs.name = 'Required';
+            if (!form.dob) errs.dob = 'Required';
+            if (Object.keys(errs).length) { setErrors(errs); return; }
+            const initials = form.name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            const age = new Date().getFullYear() - new Date(form.dob).getFullYear();
+            onNext({ ...form, cptCode: encounterTypes.find(e => e.label === form.encounterType)?.cpt || '97166', avatar: initials, avatarColor: 'bg-blue-500', age, id: Date.now(), sessionDate: form.visitDate, inputMode: 'manual' });
+          }}
+          className="w-full bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Manual Typing
+        </button>
+      </div>
     </form>
   );
 }
@@ -257,7 +275,7 @@ function RecordingStep({ patient, onDone }) {
 }
 
 export default function NewSessionPage({ onBack, onSessionCreated }) {
-  const [step, setStep] = useState('info');
+  const [step, setStep] = useState('info'); // 'info' | 'record' | 'manual'
   const [patientData, setPatientData] = useState(null);
 
   const handleDone = (soap) => {
@@ -274,26 +292,38 @@ export default function NewSessionPage({ onBack, onSessionCreated }) {
     });
   };
 
+  const handlePatientNext = (data) => {
+    setPatientData(data);
+    setStep(data.inputMode === 'manual' ? 'manual' : 'record');
+  };
+
+  const stepLabel = {
+    info:   'Step 1 of 2 — Patient Information',
+    record: 'Step 2 of 2 — Voice Recording',
+    manual: 'Step 2 of 2 — Manual Entry',
+  };
+
   return (
     <div className="min-h-full bg-slate-50">
       {/* Page header */}
       <div className="bg-white border-b border-slate-200 px-8 py-4 flex items-center gap-4">
-        <button onClick={onBack} className="flex items-center gap-1.5 text-slate-400 hover:text-slate-700 text-sm transition-colors">
+        <button
+          onClick={() => step === 'info' ? onBack() : setStep('info')}
+          className="flex items-center gap-1.5 text-slate-400 hover:text-slate-700 text-sm transition-colors"
+        >
           <ArrowLeft size={16} /> Back
         </button>
         <div className="w-px h-5 bg-slate-200" />
         <div>
           <p className="font-bold text-slate-800">New Session</p>
-          <p className="text-xs text-slate-400 mt-0.5">
-            {step === 'info' ? 'Step 1 of 2 — Patient Information' : 'Step 2 of 2 — Record Conversation'}
-          </p>
+          <p className="text-xs text-slate-400 mt-0.5">{stepLabel[step]}</p>
         </div>
       </div>
 
       {/* Step progress bar */}
       <div className="flex gap-2 px-8 pt-6 max-w-xl mx-auto">
-        {['info', 'record'].map((s) => (
-          <div key={s} className={`h-1 flex-1 rounded-full transition-all ${step === s || (s === 'info' && step === 'record') ? 'bg-blue-500' : 'bg-slate-200'}`} />
+        {['info', 'next'].map((_, i) => (
+          <div key={i} className={`h-1 flex-1 rounded-full transition-all ${step === 'info' && i === 0 ? 'bg-blue-500' : step !== 'info' ? 'bg-blue-500' : 'bg-slate-200'}`} />
         ))}
       </div>
 
@@ -301,12 +331,30 @@ export default function NewSessionPage({ onBack, onSessionCreated }) {
         <AnimatePresence mode="wait">
           {step === 'info' && (
             <motion.div key="info" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
-              <PatientInfoStep onNext={(data) => { setPatientData(data); setStep('record'); }} />
+              <PatientInfoStep onNext={handlePatientNext} />
             </motion.div>
           )}
           {step === 'record' && (
             <motion.div key="record" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
               <RecordingStep patient={patientData} onDone={handleDone} />
+            </motion.div>
+          )}
+          {step === 'manual' && (
+            <motion.div key="manual" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
+              <div className="max-w-xl mx-auto space-y-5">
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-600 space-y-1">
+                  <p><span className="font-medium text-slate-700">Patient:</span> {patientData?.name}</p>
+                  <p><span className="font-medium text-slate-700">Encounter:</span> {patientData?.encounterType} · CPT {patientData?.cptCode}</p>
+                </div>
+                <p className="text-sm text-slate-500 text-center">The SOAP note editor will open with empty sections ready for manual input.</p>
+                <button
+                  onClick={() => handleDone({ subjective: '', objective: '', assessment: '', plan: '' })}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Open SOAP Note Editor
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
