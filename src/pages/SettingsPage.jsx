@@ -157,7 +157,7 @@ export default function SettingsPage() {
           <div className="space-y-3">
             {[
               { label: 'Humpty Dumpty Fall Risk', desc: 'Required for CPT 97166 — Initial Evaluation', enforced: true },
-              { label: 'Outcome Measure Completion', desc: 'Required for CPT 96112 / 96113 — Standardized Assessment', enforced: true },
+              { label: 'Outcome Measure Completion', desc: 'Required for CPT 96112 / 96113 — Standardised Assessment', enforced: true },
               { label: 'Block finalization if incomplete', desc: 'Prevent note sign-off until all required items are checked', enforced: true },
             ].map(item => (
               <div key={item.label} className="flex items-start gap-3 px-4 py-3 bg-slate-50 rounded-lg">

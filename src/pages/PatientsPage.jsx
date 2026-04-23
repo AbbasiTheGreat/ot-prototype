@@ -8,33 +8,33 @@ const basePatients = [
   {
     id: 6, name: "Sofia Ramirez", age: 8, dob: "2017-06-12", cptCode: "97530", encounterType: "Follow-Up",
     sessionDate: "2026-04-08", sessionTime: "09:30", therapist: "Sarah Mitchell, OTR/L",
-    status: "Scheduled", avatar: "SR", avatarColor: "bg-pink-500",
+    status: "Scheduled", avatar: "SR", avatarColor: "bg-blue-500",
     diagnosis: "Fine Motor Delay", referralSource: "Dr. Chen, Pediatrics",
     lastVisit: "2026-03-30", totalSessions: 12,
   },
   {
     id: 7, name: "Noah Williams", age: 10, dob: "2015-11-20", cptCode: "97166", encounterType: "Initial Evaluation",
     sessionDate: "2026-04-09", sessionTime: "11:00", therapist: "Sarah Mitchell, OTR/L",
-    status: "Scheduled", avatar: "NW", avatarColor: "bg-indigo-500",
+    status: "Scheduled", avatar: "NW", avatarColor: "bg-blue-500",
     diagnosis: "ADHD, Handwriting Difficulties", referralSource: "School Referral",
     lastVisit: null, totalSessions: 0,
   },
   {
     id: 8, name: "Amara Johnson", age: 3, dob: "2022-09-05", cptCode: "97166", encounterType: "Initial Evaluation",
     sessionDate: "2026-04-10", sessionTime: "14:00", therapist: "Sarah Mitchell, OTR/L",
-    status: "Scheduled", avatar: "AJ", avatarColor: "bg-rose-500",
+    status: "Scheduled", avatar: "AJ", avatarColor: "bg-blue-500",
     diagnosis: "Global Developmental Delay", referralSource: "Dr. Patel, Neurology",
     lastVisit: null, totalSessions: 0,
   },
 ];
 
 const statusBadge = {
-  'Completed':     'bg-emerald-50 text-emerald-700 border border-emerald-200',
-  'In Progress':   'bg-blue-50 text-blue-700 border border-blue-200',
+  'Completed':     'bg-blue-50 text-blue-700 border border-blue-200',
+  'In Progress':   'bg-slate-100 text-slate-600 border border-slate-200',
   'Scheduled':     'bg-slate-100 text-slate-600 border border-slate-200',
-  'Pending Review':'bg-amber-50 text-amber-700 border border-amber-200',
-  'Draft':         'bg-orange-50 text-orange-600 border border-orange-200',
-  'Finalized':     'bg-purple-50 text-purple-700 border border-purple-200',
+  'Pending Review':'bg-red-50 text-red-700 border border-red-200',
+  'Draft':         'bg-red-50 text-red-700 border border-red-200',
+  'Finalized':     'bg-blue-50 text-blue-700 border border-blue-200',
 };
 
 export default function PatientsPage({ onSelectPatient, onNewSession, extraPatients }) {
@@ -135,12 +135,7 @@ export default function PatientsPage({ onSelectPatient, onNewSession, extraPatie
                 >
                   <td className="px-5 py-4 text-slate-400 text-xs font-mono">{String(i + 1).padStart(3, '0')}</td>
                   <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full ${p.avatarColor} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
-                        {p.avatar}
-                      </div>
-                      <span className="font-semibold text-slate-800">{p.name}</span>
-                    </div>
+                    <span className="font-semibold text-slate-800">{p.name}</span>
                   </td>
                   <td className="px-5 py-4 text-slate-600">{p.encounterType}</td>
                   <td className="px-5 py-4">

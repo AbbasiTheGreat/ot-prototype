@@ -8,14 +8,14 @@ const sections = [
   { key: 'subjective', label: 'Subjective', short: 'S', color: 'blue', desc: 'Patient/caregiver reported information, home & school progress, concerns' },
   { key: 'objective', label: 'Objective', short: 'O', color: 'teal', desc: 'Activities performed and direct observations only — no interpretation here' },
   { key: 'assessment', label: 'Assessment', short: 'A', color: 'purple', desc: 'Clinical reasoning, progress analysis, emerging skills, barriers' },
-  { key: 'plan', label: 'Plan', short: 'P', color: 'orange', desc: 'Next steps, frequency, home program, caregiver education' },
+  { key: 'plan', label: 'Plan', short: 'P', color: 'blue', desc: 'Next steps, frequency, home programme, caregiver education' },
 ];
 
 const sectionColors = {
-  blue:   { border: 'border-blue-300',   bg: 'bg-blue-50',   badge: 'bg-blue-500',   text: 'text-blue-700',   ring: 'focus:ring-blue-200' },
-  teal:   { border: 'border-teal-300',   bg: 'bg-teal-50',   badge: 'bg-teal-500',   text: 'text-teal-700',   ring: 'focus:ring-teal-200' },
-  purple: { border: 'border-purple-300', bg: 'bg-purple-50', badge: 'bg-purple-500', text: 'text-purple-700', ring: 'focus:ring-purple-200' },
-  orange: { border: 'border-orange-300', bg: 'bg-orange-50', badge: 'bg-orange-500', text: 'text-orange-700', ring: 'focus:ring-orange-200' },
+  blue:   { border: 'border-blue-300',  bg: 'bg-blue-50',  badge: 'bg-blue-500',  text: 'text-blue-700',  ring: 'focus:ring-blue-200' },
+  teal:   { border: 'border-blue-300',  bg: 'bg-blue-50',  badge: 'bg-blue-500',  text: 'text-blue-700',  ring: 'focus:ring-blue-200' },
+  purple: { border: 'border-blue-300',  bg: 'bg-blue-50',  badge: 'bg-blue-500',  text: 'text-blue-700',  ring: 'focus:ring-blue-200' },
+  orange: { border: 'border-blue-300',  bg: 'bg-blue-50',  badge: 'bg-blue-500',  text: 'text-blue-700',  ring: 'focus:ring-blue-200' },
 };
 
 export default function SOAPEditor({ patient, onComplete }) {
@@ -43,14 +43,9 @@ export default function SOAPEditor({ patient, onComplete }) {
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`flex items-center justify-between px-4 py-3 rounded-xl border ${
-          patient.cptCode === '97166' ? 'bg-blue-50 border-blue-200' :
-          patient.cptCode === '96112' ? 'bg-purple-50 border-purple-200' :
-          'bg-emerald-50 border-emerald-200'
-        }`}
+        className="flex items-center justify-between px-4 py-3 rounded-xl border bg-blue-50 border-blue-200"
       >
         <div className="flex items-center gap-2">
-          <Sparkles size={15} className={patient.cptCode === '97166' ? 'text-blue-500' : patient.cptCode === '96112' ? 'text-purple-500' : 'text-emerald-500'} />
           <span className="text-sm font-medium text-slate-700">
             Template auto-loaded: <strong>{template.label}</strong> (CPT {patient.cptCode})
           </span>
@@ -58,7 +53,7 @@ export default function SOAPEditor({ patient, onComplete }) {
         <Button variant="outline" size="sm" onClick={() => {
           sections.forEach(s => setNotes(prev => ({ ...prev, [s.key]: template[s.key] })));
         }}>
-          Apply All Sections
+          Apply Template To All Sections
         </Button>
       </motion.div>
 
@@ -92,10 +87,7 @@ export default function SOAPEditor({ patient, onComplete }) {
                 {wordCount(notes[section.key]) > 0 && (
                   <span className="text-xs text-slate-400">{wordCount(notes[section.key])} words</span>
                 )}
-                {notes[section.key].trim().length > 20 && (
-                  <div className="w-2 h-2 rounded-full bg-emerald-400" title="Complete" />
-                )}
-                <button onClick={(e) => { e.stopPropagation(); setCollapsed(prev => ({ ...prev, [section.key]: !prev[section.key] })); }}>
+                {notes[section.key].trim().length > 20 && null}                <button onClick={(e) => { e.stopPropagation(); setCollapsed(prev => ({ ...prev, [section.key]: !prev[section.key] })); }}>
                   {isCollapsed ? <ChevronDown size={16} className="text-slate-400" /> : <ChevronUp size={16} className="text-slate-400" />}
                 </button>
               </div>
@@ -113,13 +105,12 @@ export default function SOAPEditor({ patient, onComplete }) {
                   <div className="px-4 pb-4 space-y-3">
                     <div className="flex items-center gap-2 pt-1">
                       <Button variant="ghost" size="sm" onClick={() => handleApplyTemplate(section.key)}>
-                        <Sparkles size={13} /> Use Template
+                        Use Template
                       </Button>
                       <button
                         onClick={() => setShowSuggestions(prev => ({ ...prev, [section.key]: !prev[section.key] }))}
-                        className="ml-auto flex items-center gap-1 text-xs text-amber-600 hover:text-amber-700 font-medium"
+                        className="ml-auto flex items-center gap-1 text-xs text-slate-800 hover:text-slate-600 font-medium"
                       >
-                        <Lightbulb size={13} />
                         AI Tips {showSuggestions[section.key] ? '▲' : '▼'}
                       </button>
                     </div>
@@ -142,9 +133,9 @@ export default function SOAPEditor({ patient, onComplete }) {
                           className="space-y-1.5 overflow-hidden"
                         >
                           {suggestions.map((tip, i) => (
-                            <div key={i} className="flex items-start gap-2 px-3 py-2 bg-amber-50 border border-amber-100 rounded-lg">
-                              <Info size={13} className="text-amber-500 mt-0.5 shrink-0" />
-                              <p className="text-xs text-amber-700">{tip}</p>
+                            <div key={i} className="flex items-start gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg">
+                              <Info size={13} className="text-slate-400 mt-0.5 shrink-0" />
+                              <p className="text-xs text-slate-500">{tip}</p>
                             </div>
                           ))}
                         </motion.div>
@@ -160,11 +151,10 @@ export default function SOAPEditor({ patient, onComplete }) {
 
       <div className="flex items-center justify-between pt-2">
         <p className="text-xs text-slate-400">
-          {allFilled ? '✓ All sections complete — ready to finalize' : 'Complete all sections before finalizing'}
+          {allFilled ? '✓ All sections complete — ready to finalise' : 'Complete all sections before finalising'}
         </p>
         <Button variant={allFilled ? 'success' : 'secondary'} disabled={!allFilled} onClick={onComplete}>
-          Proceed to Compliance Check
-        </Button>
+          Proceed to Compliance Check        </Button>
       </div>
     </div>
   );

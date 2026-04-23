@@ -5,7 +5,7 @@ import { X, User, Mic, MicOff, Sparkles, Loader2, CheckCircle2, ChevronRight } f
 // CPT auto-detection based on encounter type
 const encounterTypes = [
   { label: 'Initial Evaluation', cpt: '97166' },
-  { label: 'Standardized Assessment', cpt: '96112' },
+  { label: 'Standardised Assessment', cpt: '96112' },
   { label: 'Follow-Up', cpt: '97530' },
 ];
 

@@ -47,7 +47,7 @@ function ConnectingAnimation({ onDone }) {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className={`rounded-2xl px-6 py-5 flex flex-col items-center gap-2 shadow-xl w-36 transition-all duration-500 ${status === 'success' ? 'bg-emerald-500' : 'bg-white'}`}
+            className={`rounded-2xl px-6 py-5 flex flex-col items-center gap-2 shadow-xl w-36 transition-all duration-500 ${status === 'success' ? 'bg-blue-500' : 'bg-white'}`}
           >
             {status === 'success' ? (
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300 }}>
@@ -70,7 +70,7 @@ function ConnectingAnimation({ onDone }) {
               Connecting to Elite Platform...
             </motion.p>
           ) : (
-            <motion.p key="success" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="text-emerald-600 text-sm font-medium">
+            <motion.p key="success" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="text-blue-600 text-sm font-medium">
               Connected successfully
             </motion.p>
           )}
@@ -91,7 +91,7 @@ export default function ConnectPage({ onConnect }) {
     if (username === 'admin' && password === 'admin') {
       setConnecting(true);
     } else {
-      setError('Invalid credentials. Please try again.');
+              setError('Invalid credentials. Please try again.');
     }
   };
 
@@ -119,7 +119,6 @@ export default function ConnectPage({ onConnect }) {
 
         <h1 className="text-2xl font-bold text-slate-800 mb-1">Sign in</h1>
         <p className="text-slate-500 text-sm mb-6">Enter your credentials to connect to Elite Platform.</p>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Username</label>

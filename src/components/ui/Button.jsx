@@ -3,7 +3,7 @@ import clsx from 'clsx';
 const variants = {
   primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm',
   secondary: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm',
-  success: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm',
+  success: 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm',
   danger: 'bg-red-600 hover:bg-red-700 text-white shadow-sm',
   ghost: 'hover:bg-slate-100 text-slate-600',
   outline: 'border border-blue-300 text-blue-600 hover:bg-blue-50',

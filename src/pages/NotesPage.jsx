@@ -7,7 +7,7 @@ import { patients } from '../data/mockData';
 
 const notes = [
   {
-    id: 1, patientName: "Marcus Thompson", patientAvatar: "MT", avatarColor: "bg-green-500",
+    id: 1, patientName: "Marcus Thompson", patientAvatar: "MT", avatarColor: "bg-blue-500",
     cptCode: "97530", encounterType: "Follow-Up", date: "2026-04-06",
     status: "Finalized", signedBy: "Sarah Mitchell, OTR/L", signedAt: "2026-04-06 12:45",
     preview: "Marcus demonstrates meaningful progress toward handwriting legibility goal, with a 58% improvement in writing speed since baseline...",
@@ -21,28 +21,28 @@ const notes = [
     qualityScore: 81,
   },
   {
-    id: 3, patientName: "Lily Nguyen", patientAvatar: "LN", avatarColor: "bg-purple-500",
-    cptCode: "96112", encounterType: "Standardized Assessment", date: "2026-04-06",
+    id: 3, patientName: "Lily Nguyen", patientAvatar: "LN", avatarColor: "bg-blue-500",
+    cptCode: "96112", encounterType: "Standardised Assessment", date: "2026-04-06",
     status: "Pending Review", signedBy: null, signedAt: null,
     preview: "Sensory Profile 2 results: Sensory Sensitivity — Much More Than Others. PDMS-2 Grasping Standard Score: 7 (16th percentile)...",
     qualityScore: 88,
   },
   {
-    id: 4, patientName: "Marcus Thompson", patientAvatar: "MT", avatarColor: "bg-green-500",
+    id: 4, patientName: "Marcus Thompson", patientAvatar: "MT", avatarColor: "bg-blue-500",
     cptCode: "97530", encounterType: "Follow-Up", date: "2026-03-30",
     status: "Finalized", signedBy: "Sarah Mitchell, OTR/L", signedAt: "2026-03-30 13:10",
     preview: "Patient demonstrates continued progress in handwriting speed. Timed copying task improved to 32 wpm with 78% legibility...",
     qualityScore: 91,
   },
   {
-    id: 5, patientName: "Ethan Brooks", patientAvatar: "EB", avatarColor: "bg-teal-500",
+    id: 5, patientName: "Ethan Brooks", patientAvatar: "EB", avatarColor: "bg-blue-500",
     cptCode: "97530", encounterType: "Follow-Up", date: "2026-03-30",
     status: "Finalized", signedBy: "Sarah Mitchell, OTR/L", signedAt: "2026-03-30 15:20",
     preview: "Ethan tolerated dry rice bin for 3 minutes with no behavioral response. Wet sand tolerance emerging — new milestone this session...",
     qualityScore: 87,
   },
   {
-    id: 6, patientName: "Zoe Patel", patientAvatar: "ZP", avatarColor: "bg-orange-500",
+    id: 6, patientName: "Zoe Patel", patientAvatar: "ZP", avatarColor: "bg-blue-500",
     cptCode: "97166", encounterType: "Initial Evaluation", date: "2026-04-06",
     status: "Draft", signedBy: null, signedAt: null,
     preview: "MABC-2 Total Test Score: 5th percentile. Balance: 2nd percentile. Significant postural sway during single-leg stance...",

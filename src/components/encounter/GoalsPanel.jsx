@@ -30,7 +30,7 @@ export default function GoalsPanel({ patient }) {
   };
 
   const approveGoal = (id) => {
-    setGoals(prev => prev.map(g => g.id === id ? { ...g, approved: true } : g));
+    setGoals(prev => prev.map(g => g.id === id ? { ...g, approved: !g.approved } : g));
   };
 
   const deleteGoal = (id) => {
@@ -54,7 +54,7 @@ export default function GoalsPanel({ patient }) {
           <Target size={18} className="text-blue-500" />
           <h3 className="font-semibold text-slate-800">Therapy Goals</h3>
           <Badge variant="blue">{goals.length} active</Badge>
-          <Badge variant="green">{goals.filter(g => g.approved).length} approved</Badge>
+          <Badge variant="blue">{goals.filter(g => g.approved).length} approved</Badge>
         </div>
         <div className="flex gap-2">
           <Button variant="secondary" size="sm" onClick={() => setAddingManual(true)}>
@@ -75,8 +75,7 @@ export default function GoalsPanel({ patient }) {
               <textarea
                 value={manualText}
                 onChange={e => setManualText(e.target.value)}
-                placeholder="Patient will [action] to [measurable outcome] with [accuracy/frequency] within 6 months..."
-                rows={3}
+                placeholder="Patient will [action] to [measurable outcome] with [accuracy/frequency] within 6 months..."                rows={3}
                 className="w-full text-xs text-slate-700 border border-blue-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 resize-none bg-white"
               />
               <div className="flex gap-2 mt-2">
@@ -91,7 +90,7 @@ export default function GoalsPanel({ patient }) {
       {/* SMART info */}
       <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 border border-blue-100 rounded-lg">
         <Clock size={13} className="text-blue-500 shrink-0" />
-        <p className="text-xs text-blue-600">All goals use a standardized 6-month timeframe. Review and edit before approving.</p>
+        <p className="text-xs text-blue-600">All goals use a standardised 6-month timeframe. Review and edit before approving.</p>
       </div>
 
       {/* AI Suggestions */}
@@ -127,8 +126,7 @@ export default function GoalsPanel({ patient }) {
       {goals.length === 0 ? (
         <Card className="p-8 text-center">
           <Target size={32} className="text-slate-200 mx-auto mb-2" />
-          <p className="text-sm text-slate-400">No goals yet. Use AI suggestions or add manually.</p>
-        </Card>
+          <p className="text-sm text-slate-400">No goals yet. Use AI suggestions or add manually.</p>        </Card>
       ) : (
         <div className="space-y-2">
           {goals.map((goal, i) => (
@@ -138,12 +136,12 @@ export default function GoalsPanel({ patient }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
             >
-              <Card className={`p-4 ${goal.approved ? 'border-emerald-200 bg-emerald-50/30' : ''}`}>
+              <Card className={`p-4 ${goal.approved ? 'border-blue-200 bg-blue-50/30' : ''}`}>
                 <div className="flex items-start gap-3">
-                  <div className="mt-0.5 shrink-0">
+                  <div className="mt-0.5 shrink-0 cursor-pointer" onClick={() => approveGoal(goal.id)}>
                     {goal.approved
-                      ? <CheckCircle2 size={18} className="text-emerald-500" />
-                      : <div className="w-4.5 h-4.5 rounded-full border-2 border-slate-300" />
+                      ? <CheckCircle2 size={18} className="text-green-500" />
+                      : <div className="w-[18px] h-[18px] rounded-full border-2 border-slate-300 hover:border-blue-400 transition-colors" />
                     }
                   </div>
                   <div className="flex-1 min-w-0">
@@ -164,18 +162,13 @@ export default function GoalsPanel({ patient }) {
                       <p className="text-xs text-slate-700 leading-relaxed">{goal.text}</p>
                     )}
                     <div className="flex items-center gap-2 mt-2">
-                      <Badge variant={goal.approved ? 'green' : 'yellow'}>
+                      <Badge variant={goal.approved ? 'blue' : 'gray'}>
                         {goal.approved ? 'Approved' : 'Pending Review'}
                       </Badge>
                       <span className="text-xs text-slate-400">6-month goal</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    {!goal.approved && (
-                      <Button variant="ghost" size="sm" onClick={() => approveGoal(goal.id)} className="text-emerald-600 hover:bg-emerald-50">
-                        <CheckCircle2 size={14} />
-                      </Button>
-                    )}
                     {editingId !== goal.id && (
                       <Button variant="ghost" size="sm" onClick={() => startEdit(goal)}>
                         <Edit3 size={14} />

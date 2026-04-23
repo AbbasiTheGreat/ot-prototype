@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, RefreshCw, CheckCircle2, AlertTriangle, DollarSign, User } from 'lucide-react';
+import { Clock, RefreshCw, CheckCircle2, AlertTriangle, User } from 'lucide-react';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
@@ -113,7 +113,7 @@ export default function BillingSync({ patient }) {
           </Button>
 
           {synced && (
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-emerald-600 text-center mt-2">
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-blue-600 text-center mt-2">
               ✓ Time entry automatically updated — no duplicate entry needed
             </motion.p>
           )}
@@ -124,7 +124,6 @@ export default function BillingSync({ patient }) {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
         <Card className="p-5">
           <div className="flex items-center gap-2 mb-4">
-            <DollarSign size={18} className="text-emerald-500" />
             <h3 className="font-semibold text-slate-800">Orders / Services</h3>
             {synced && <Badge variant="green">Auto-Updated</Badge>}
           </div>
@@ -136,15 +135,14 @@ export default function BillingSync({ patient }) {
               </div>
               {synced
                 ? <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
-                : <AlertTriangle size={16} className="text-orange-400 shrink-0" />
+                : <AlertTriangle size={16} className="text-red-400 shrink-0" />
               }
             </div>
           </div>
           {!synced && (
-            <p className="text-xs text-orange-500 mt-2 flex items-center gap-1">
+            <p className="text-xs text-red-500 mt-2 flex items-center gap-1">
               <AlertTriangle size={12} /> Times not yet synced — click Sync above to update billing
-            </p>
-          )}
+            </p>          )}
         </Card>
       </motion.div>
     </div>
