@@ -6,7 +6,7 @@ import Button from '../ui/Button';
 import Badge from '../ui/Badge';
 import { smartGoalSuggestions } from '../../data/mockData';
 
-export default function GoalsPanel({ patient }) {
+export default function GoalsPanel({ patient, onComplete }) {
   const [goals, setGoals] = useState(patient.goals || []);
   const [suggestions, setSuggestions] = useState([]);
   const [generating, setGenerating] = useState(false);
@@ -184,6 +184,16 @@ export default function GoalsPanel({ patient }) {
           ))}
         </div>
       )}
+
+      {/* Proceed button */}
+      <div className="flex items-center justify-between pt-2">
+        <p className="text-xs text-slate-400">
+          {goals.some(g => g.approved) ? '✓ At least one goal approved — ready to proceed' : 'Approve at least one goal before proceeding'}
+        </p>
+        <Button variant={goals.some(g => g.approved) ? 'success' : 'secondary'} disabled={!goals.some(g => g.approved)} onClick={onComplete}>
+          Proceed to Compliance Check
+        </Button>
+      </div>
     </div>
   );
 }

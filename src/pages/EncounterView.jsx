@@ -127,8 +127,8 @@ export default function EncounterView({ patient, onBack, onNextPatient, nextPati
             className="max-w-3xl mx-auto"
           >
             {activeTab === 'services' && <BillingSync patient={patient} />}
-            {activeTab === 'soap' && <SOAPEditor patient={patient} onComplete={() => setActiveTab('compliance')} />}
-            {activeTab === 'goals' && <GoalsPanel patient={patient} />}
+            {activeTab === 'soap' && <SOAPEditor patient={patient} onComplete={() => setActiveTab('goals')} />}
+            {activeTab === 'goals' && <GoalsPanel patient={patient} onComplete={() => setActiveTab('compliance')} />}
             {activeTab === 'compliance' && <ComplianceGate patient={patient} onFinalize={() => setFinalized(true)} onAllComplete={() => setComplianceDone(true)} onIncomplete={() => setComplianceDone(false)} />}
           </motion.div>
         </AnimatePresence>

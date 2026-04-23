@@ -35,7 +35,7 @@ export default function SOAPEditor({ patient, onComplete }) {
   };
 
   const wordCount = (text) => text.trim() ? text.trim().split(/\s+/).length : 0;
-  const allFilled = sections.every(s => notes[s.key].trim().length > 20);
+  const allFilled = sections.every(s => notes[s.key].trim().length > 0);
 
   return (
     <div className="space-y-4">
@@ -151,10 +151,10 @@ export default function SOAPEditor({ patient, onComplete }) {
 
       <div className="flex items-center justify-between pt-2">
         <p className="text-xs text-slate-400">
-          {allFilled ? '✓ All sections complete — ready to finalise' : 'Complete all sections before finalising'}
+          {allFilled ? '✓ All sections complete — ready to finalise' : 'Fill in all sections before proceeding'}
         </p>
         <Button variant={allFilled ? 'success' : 'secondary'} disabled={!allFilled} onClick={onComplete}>
-          Proceed to Compliance Check        </Button>
+          Proceed to Goals        </Button>
       </div>
     </div>
   );
