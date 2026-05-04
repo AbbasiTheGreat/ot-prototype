@@ -16,6 +16,8 @@ export const patients = [
     avatarColor: "bg-blue-500",
     diagnosis: "Developmental Coordination Disorder (DCD)",
     referralSource: "Dr. Priya Nair, Pediatrics",
+    school: "Greenwood Elementary",
+    checkInStatus: "checked-in",
     soap: {
       subjective: "Mother reports Aiden has significant difficulty with fine motor tasks at home and school. She notes he struggles to hold his pencil correctly, cannot button his shirt independently, and avoids drawing activities. Teacher has flagged concerns about handwriting legibility and scissor use in class. Aiden presents as cooperative and engaged at session start, though slightly anxious in the new environment. Caregiver reports home programme from previous provider was inconsistent due to scheduling.",
       objective: "Aiden participated in a 50-minute initial OT evaluation. Standardised assessments administered: Bruininks-Oseretsky Test of Motor Proficiency, 2nd Edition (BOT-2), Fine Motor Composite. Skilled observations included: pencil grasp, scissor use, bilateral coordination tasks, and visual-motor integration via copying geometric shapes. Aiden demonstrated a static tripod grasp with excessive proximal stabilization. He was unable to cut along a straight 6-inch line, deviating >1 cm on 4 of 5 trials. Bilateral coordination tasks revealed difficulty crossing midline during alternating hand activities.",
@@ -46,6 +48,8 @@ export const patients = [
     avatarColor: "bg-blue-500",
     diagnosis: "Sensory Processing Disorder, Autism Spectrum Disorder (Level 1)",
     referralSource: "Dr. James Okafor, Developmental Pediatrics",
+    school: "Sunrise Preschool",
+    checkInStatus: "not-arrived",
     soap: {
       subjective: "Mother reports Lily has become increasingly distressed during daily routines involving tactile input — resists hair brushing, toothbrushing, and wearing certain clothing textures. Caregiver notes Lily covers her ears frequently in noisy environments and has meltdowns during transitions. School reports difficulty with group activities and sensory-rich environments such as the cafeteria and gym. Since last assessment 6 months ago, caregiver reports regression in self-dressing and increased avoidance of messy play. Lily presents as quiet and watchful at session start, requiring 10 minutes of warm-up before engaging with assessor.",
       objective: "Lily participated in a 60-minute Standardised assessment session. Sensory Profile 2 (Caregiver Questionnaire, ages 3–14) administered and scored. Peabody Developmental Motor Scales, 2nd Edition (PDMS-2) Grasping and Visual-Motor Integration subtests administered. Testing conditions: quiet therapy room, low lighting, familiar toys available. Lily demonstrated good cooperation after warm-up period. Sensory Profile 2 results: Sensory Sensitivity — Much More Than Others (raw score 48/65); Avoiding — Much More Than Others (raw score 52/65); Registration — Less Than Others (raw score 29/65). PDMS-2 Grasping Standard Score: 7 (16th percentile). Visual-Motor Integration Standard Score: 6 (9th percentile).",
@@ -75,6 +79,8 @@ export const patients = [
     avatarColor: "bg-blue-500",
     diagnosis: "Dysgraphia, ADHD (Combined Presentation)",
     referralSource: "School-based referral via Ms. Karen Holt, Resource Teacher",
+    school: "Maplewood Academy",
+    checkInStatus: "checked-out",
     soap: {
       subjective: "Marcus's mother reports noticeable improvement in his willingness to complete written homework over the past two weeks. She notes he is using the pencil grip provided and has reduced complaints of hand fatigue. Teacher emailed this week to report improved legibility on classroom assignments. Marcus presents as energetic and motivated today — he independently retrieved his materials from his backpack and set up his workspace without prompting. Home programme compliance reported as 4 out of 7 days this week.",
       objective: "Marcus participated in a 45-minute follow-up OT session. Activities included: cursive letter formation practice using multisensory approach (sand tray, then paper), timed copying task from whiteboard (3 sentences, 2-minute trial), and fine motor warm-up with therapy putty (heavy resistance, 5 minutes). Marcus demonstrated a functional dynamic tripod grasp throughout the session with no observed hand fatigue. Timed copying task: 38 words per minute with 85% legibility (baseline 6 weeks ago: 24 wpm, 62% legibility). Letter sizing and spacing improved; descenders still inconsistent.",
@@ -104,6 +110,8 @@ export const patients = [
     avatarColor: "bg-blue-500",
     diagnosis: "Hypotonia, Developmental Delay",
     referralSource: "Dr. Amara Singh, Neurology",
+    school: "Greenwood Elementary",
+    checkInStatus: "not-arrived",
     soap: {
       subjective: "Father reports Zoe tires quickly during physical activities and has difficulty keeping up with peers on the playground. He notes she frequently trips and falls, avoids climbing equipment, and has recently started refusing PE class. At home, Zoe struggles with self-care tasks including managing clothing fasteners and carrying her school bag. Father expresses concern about Zoe's self-confidence, noting she has begun saying 'I can't do it' before attempting new tasks. Zoe presents as shy but warms up quickly — she engaged willingly with all assessment activities after a brief play-based introduction.",
       objective: "Zoe participated in a 55-minute initial OT evaluation. Standardised assessments administered: Movement Assessment Battery for Children, 2nd Edition (MABC-2), Age Band 2 (7–10 years). Skilled observations included: postural control during seated and standing tasks, upper extremity strength and endurance, gross motor coordination, and self-care task performance (fastening buttons, managing zipper). MABC-2 results: Total Test Score — 5th percentile (borderline). Manual Dexterity: 9th percentile. Aiming & Catching: 5th percentile. Balance: 2nd percentile. Observed significant postural sway during single-leg stance (unable to maintain >2 seconds bilaterally). Upper extremity strength reduced — grip strength 8 kg bilaterally (norm for age: 12–14 kg).",
@@ -133,6 +141,8 @@ export const patients = [
     avatarColor: "bg-blue-500",
     diagnosis: "Sensory Processing Disorder, Tactile Defensiveness",
     referralSource: "Dr. Fatima Al-Hassan, Developmental Pediatrics",
+    school: "Sunrise Preschool",
+    checkInStatus: "not-arrived",
     soap: {
       subjective: "Mother reports Ethan had a difficult week — he refused to wear his school uniform twice due to the collar texture and had a significant meltdown during art class when asked to use finger paints. She notes he is still making progress with the brushing protocol at home and tolerates it on 5 of 7 days. Preschool teacher reports Ethan is increasingly participating in sensory table activities with peers, which is a notable improvement from 6 weeks ago when he refused entirely. Ethan presents as slightly dysregulated at session start — he was given 5 minutes of proprioceptive input (jumping, wall push-ups) before structured activities.",
       objective: "Ethan participated in a 45-minute follow-up OT session. Activities included: Wilbarger Brushing Protocol (therapist-administered, upper extremities and back), graded tactile exploration sequence (dry rice bin → wet sand → shaving foam — stopped at wet sand per Ethan's tolerance), and fine motor play with therapy putty (medium resistance). Ethan tolerated dry rice bin for 4 minutes with no behavioural response (previously refused at 30 seconds). Tolerated wet sand for 90 seconds before requesting to stop — accepted hand wipe and returned to activity after 2-minute break. Refused shaving foam — consistent with prior sessions.",
